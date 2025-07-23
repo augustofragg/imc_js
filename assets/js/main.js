@@ -8,28 +8,51 @@ function main() {
          * @type {HTMLInputElement}
          */
         const weight = document.querySelector('.input_weight');
-        const weightValue = Number(weight.value);
-
         /**
          * @type {HTMLInputElement}
          */
         const height = document.querySelector('.input_height');
-        const heightValue = Number(height.value)
 
-        const result = calcImc(weightValue,heightValue);
-
-        /** @type {HTMLDivElement} */
-        const bunner_result = document.querySelector('.banner_result');
-        if(bunner_result.style.display === 'none') {
-            bunner_result.style.display = 'block';
-            bunner_result.innerHTML = result;
-        }
-        else if(bunner_result.style.display === 'block') {
-            bunner_result.style.display = 'none';
-        }
+        render(weight.value,height.value);
     });
 }
+/** 
+ * @param {String} weight
+ * @param {String} height
+ * @void 
+*/
+function render(weight, height) {
+    /** @type {HTMLDivElement} */
+    const banner_result = document.querySelector('.banner_result');
 
+    const weightValue = Number(weight);
+    const heightValue = Number(height);
+
+    const result = calcImc(weightValue,heightValue);   
+
+    // const notNumberOr = isNaN(heightValue) && isNaN(weightValue);
+    
+    if(banner_result.style.display === 'none' || banner_result.style.display === 'block') {
+        if(banner_result.style.display === 'none' ) {
+            banner_result.style.display = 'block';
+        }
+        if(isNaN(weightValue)) {
+            banner_result.style.backgroundColor = '#fe7287';
+            banner_result.innerHTM = '';
+            banner_result.innerHTML = 'Peso Inválido';
+        }
+        else if(isNaN(heightValue)) {
+            banner_result.style.backgroundColor = '#fe7287';
+            banner_result.innerHTM = '';
+            banner_result.innerHTML = 'Altura inválida';
+        }
+        else {
+            banner_result.style.backgroundColor = '#00fec1';
+            banner_result.innerHTM = '';
+            banner_result.innerHTML = result;
+        }
+    }
+}
 /** 
  * @param {Number} weightValue 
  * @param {Number} heightValue
@@ -37,25 +60,28 @@ function main() {
 */
 function calcImc(weightValue,heightValue) {
 
-    const imcResult = weightValue / Math.pow(heightValue,2);
+
+    const imcResult = (weightValue) / (Math.pow(heightValue,2));
+
+    const respostaPadrao = `Seu IMC é ${imcResult.toFixed(2) } `;
 
     if(imcResult <= 18.5) {
-        return `Seu IMC é ${imcResult.toFixed(2) } (Abaixo do Peso)`;
+        return respostaPadrao + `(Abaixo do Peso)`;
     }
     else if(imcResult > 18.5 && imcResult <= 24.9) {
-        return `Seu IMC é ${imcResult.toFixed(2) } (Peso normal)`;
+        return respostaPadrao + `(Peso normal)`;
     }
     else if(imcResult >= 25 && imcResult <= 29.9) {
-        return `Seu IMC é ${imcResult.toFixed(2) } (sobrepeso)`;
+        return respostaPadrao + `(sobrepeso)`;
     }
     else if(imcResult >= 30 && imcResult <= 34.9) {
-        return `Seu IMC é ${imcResult.toFixed(2) } (Obesidade grau 1)`;
+        return respostaPadrao + `(Obesidade grau 1)`;
     }
     else if(imcResult >= 35 && imcResult <= 39.9) {
-        return `Seu IMC é ${imcResult.toFixed(2) } (Obesidade grau 2)`;
+        return respostaPadrao + `(Obesidade grau 2)`;
     }
     else if(imcResult > 40) {
-        return `Seu IMC é ${imcResult.toFixed(2) } (Obesidade grau 3)`;
+        return respostaPadrao + `(Obesidade grau 3)`;
     }
 }
 
